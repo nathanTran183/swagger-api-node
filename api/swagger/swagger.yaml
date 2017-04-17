@@ -1,0 +1,347 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: Hello World App
+# during dev, should point to your local machine
+host: localhost:10010
+# basePath prefixes all resource paths 
+basePath: /
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    in: header
+    name: Authorization
+paths:
+  /hello/{name}:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: hello_world
+    get:
+      description: Returns 'Hello' to the caller
+      # used as the method name of the controller
+      operationId: hello
+      parameters:
+        - name: name
+          in: path
+          description: The name of the person to whom to say hello
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /login:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: auth_controller
+    post:
+      description: return user if valid information is post
+      # used as the method name of the controller
+      operationId: login
+      parameters:
+        - name: username
+          in: formData
+          description: Username to login
+          required: true
+          type: string
+          format: email
+        - name: password
+          in: formData
+          description: Password to login
+          required: true
+          type: string
+          minLength: 6
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/LoginResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /protected:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: auth_controller
+    get:
+      description: Returns 'access success' to the caller
+      # used as the method name of the controller
+      operationId: protected
+      security:
+        - Bearer: []
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /changePass:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: auth_controller
+    put:
+      description: Returns 'access success' to the caller
+      # used as the method name of the controller
+      operationId: updatePassword
+      security:
+        - Bearer: []
+      parameters:
+        - name: currentPass
+          in: formData
+          description: Current password to login the system
+          required: true
+          type: string
+          format: password
+          minLength: 6
+        - name: newPass
+          in: formData
+          description: New password to login the system
+          required: true
+          type: string
+          format: password
+          minLength: 6
+        - name: retypePass
+          in: formData
+          description: retype password to match with new password
+          required: true
+          type: string
+          format: password
+          minLength: 6
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /users:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: user_controller
+    get:
+      description: Returns 'access success' to the caller
+      # used as the method name of the controller
+      operationId: list
+      security:
+        - Bearer: []
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/UserListResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    post:
+        description: Returns 'access success' to the caller
+        # used as the method name of the controller
+        operationId: create
+        parameters: 
+          - name: body
+            in: body
+            required: true
+            schema: 
+              $ref: "#/definitions/User"
+        security:
+          - Bearer: []
+        responses:
+          "200":
+            description: Success
+            schema:
+              # a pointer to a definition
+              $ref: "#/definitions/UserResponse"
+          # responses may fall through to errors
+          default:
+            description: Error
+            schema:
+              $ref: "#/definitions/ErrorResponse"
+  /user/{id}:
+    x-swagger-router-controller: user_controller
+    get:
+      description: Returns 'access success' to the caller
+      # used as the method name of the controller
+      operationId: detail
+      parameters: 
+        - name: id
+          in: path
+          description: The name of the person to whom to say hello
+          required: true
+          type: string
+      security:
+        - Bearer: []
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/UserResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    delete:
+      description: Returns 'access success' to the caller
+      # used as the method name of the controller
+      operationId: delUser
+      parameters: 
+        - name: id
+          in: path
+          description: The name of the person to whom to say hello
+          required: true
+          type: string
+      security:
+        - Bearer: []
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    put:
+      description: Edit user
+      # used as the method name of the controller
+      operationId: update
+      parameters: 
+        - name: id
+          in: path
+          description: The name of the person to whom to say hello
+          required: true
+          type: string
+        - name: body
+          in: body
+          required: true
+          schema: 
+            $ref: "#/definitions/UserEdit"
+      security:
+        - Bearer: []
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/UserResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /swagger:
+    x-swagger-pipe: swagger_raw
+# complex objects have schema definitions
+definitions:
+  HelloWorldResponse:
+    required: [message]
+    properties:
+      message:
+        type: string
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  LoginResponse:
+    required:
+      - message
+      - user
+      - token
+    properties:
+      message:
+        type: string
+      user:
+        type: object
+      token:
+        type: string
+  UserListResponse:
+    required: [message, data]
+    properties:
+      message:
+        type: string
+      data:
+        type: array
+        items:
+          type: object
+          required: [first_name, last_name, address, date_of_birth, mobile_number, email]
+          properties:
+            first_name: {type: string}
+            last_name: {type: string}
+            address: {type: string}
+            date_of_birth: {type: string, format: date-time}
+            mobile_number: {type: string, pattern: "^[1-9][0-9]{9}$"}
+            email: {type: string, format: email}
+  UserResponse:
+    required: [message, data]
+    properties:
+      message:
+        type: string
+      data:
+        type: object
+        required: [first_name, last_name, address, date_of_birth, mobile_number, email]
+        properties:
+          first_name: {type: string}
+          last_name: {type: string}
+          address: {type: string}
+          date_of_birth: {type: string, format: date-time}
+          mobile_number: {type: string, pattern: "^[1-9][0-9]{9}$"}            
+          email: {type: string, format: email}
+  UserEdit:
+    type: object
+    properties:
+      first_name: {type: string}
+      last_name: {type: string}
+      address: {type: string}
+      date_of_birth: {type: string, format: date}
+      mobile_number: {type: string, pattern: "^[1-9][0-9]{9}$"}
+      email: {type: string, format: email}
+  User:
+    type: object
+    required: 
+      - first_name
+      - last_name
+      - address
+      - date_of_birth
+      - mobile_number
+      - email
+    properties:
+      first_name: {type: string}
+      last_name: {type: string}
+      address: {type: string}
+      date_of_birth: {type: string, format: date}
+      mobile_number: {type: string, pattern: "^[1-9][0-9]{9}$"}      
+      email: {type: string, format: email}

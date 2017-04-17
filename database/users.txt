@@ -1,0 +1,36 @@
+/* 1 */
+{
+    "_id" : ObjectId("58e757f76a2bb623e857ad41"),
+    "mobile_number" : "1120614526",
+    "date_of_birth" : ISODate("1994-03-17T00:00:00.000Z"),
+    "address" : "183 North Avenue, Australia",
+    "last_name" : "Tran",
+    "first_name" : "Phuc",
+    "created_at" : ISODate("2017-04-07T09:12:23.543Z"),
+    "__v" : 0
+}
+
+/* 2 */
+{
+    "_id" : ObjectId("58e75b59523f4a0c1801f43c"),
+    "mobile_number" : "1203123723",
+    "date_of_birth" : ISODate("1989-12-13T00:00:00.000Z"),
+    "address" : "New York, USA",
+    "last_name" : "Swift",
+    "first_name" : "Taylor",
+    "created_at" : ISODate("2017-04-07T09:26:49.993Z"),
+    "__v" : 0
+}
+
+/* 3 */
+{
+    "_id" : ObjectId("58e767da8af374145ce7c818"),
+    "mobile_number" : "1231231233",
+    "date_of_birth" : ISODate("1998-06-19T00:00:00.000Z"),
+    "address" : "812 South Avenue, Melbourne, Australia",
+    "last_name" : "Tran",
+    "first_name" : "Nathan",
+    "created_at" : ISODate("2017-04-07T10:20:10.078Z"),
+    "__v" : 0,
+    "updated_at" : ISODate("2017-04-07T10:22:16.232Z")
+}
